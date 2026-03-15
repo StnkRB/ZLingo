@@ -1,0 +1,34 @@
+# Google Cloud Build configuration for ZLINGO
+# This script automates the build and deployment to Google Cloud Run
+
+steps:
+  # 1. Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/zlingo', '.']
+
+  # 2. Push the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/zlingo']
+
+  # 3. Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'zlingo'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/zlingo'
+      - '--region'
+      - 'europe-west2'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'GEMINI_API_KEY=${_GEMINI_API_KEY}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/zlingo'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,0 +1,8 @@
+{
+  "name": "zlingo",
+  "description": "The ultimate GenZ talk decoder and conversation coach. Learn slang, decode memes, and practice your rizz with live AI agents.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
